@@ -30,3 +30,22 @@ export const validateTodo = (req: Request, res: Response, next: NextFunction): v
     }
     next();
 };
+
+//Validasi untuk update todo, task dan is_completed harus ada
+export const validateUpdateTodo = (req: Request, res: Response, next: NextFunction): void => {
+    const { task, is_completed } = req.body;
+
+    //Minimal salah satu harus dikirimm
+    if (task === undefined && is_completed === undefined) {
+        res.status(400).json({ success: false, message: 'Task atau is_completed wajib diisi!' });
+        return;
+    }
+
+    //Jika is_completed dikirim, harus berupa boolean
+    if (is_completed !== undefined && typeof is_completed !== 'boolean') {
+        res.status(400).json({ success: false, message: 'is_completed harus berupa boolean!' });
+        return;
+    }
+
+    next();
+};
